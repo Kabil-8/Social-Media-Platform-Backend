@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — Social</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Auth Screen -->
+  <div id="auth-screen" class="screen">
+    <div class="auth-wrapper">
+      <div class="auth-brand">
+        <div class="brand-mark">P</div>
+        <h1>Pulse</h1>
+        <p>Where ideas find their rhythm.</p>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="tab-btn active" data-tab="login">Sign In</button>
+          <button class="tab-btn" data-tab="register">Join</button>
+        </div>
+        <form id="login-form" class="auth-form active">
+          <div class="field"><label>Username</label><input type="text" id="login-username" placeholder="your_username" autocomplete="username"></div>
+          <div class="field"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"></div>
+          <div class="auth-hint">Demo accounts: <code>aurora_nova</code>, <code>felix_storm</code>, <code>mira_bloom</code> — password: <code>password123</code></div>
+          <button type="submit" class="btn-primary">Sign In</button>
+          <div class="auth-error" id="login-error"></div>
+        </form>
+        <form id="register-form" class="auth-form">
+          <div class="field"><label>Full Name</label><input type="text" id="reg-name" placeholder="Jane Smith"></div>
+          <div class="field"><label>Username</label><input type="text" id="reg-username" placeholder="jane_smith"></div>
+          <div class="field"><label>Password</label><input type="password" id="reg-password" placeholder="••••••••"></div>
+          <button type="submit" class="btn-primary">Create Account</button>
+          <div class="auth-error" id="register-error"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Shell -->
+  <div id="main-screen" class="screen hidden">
+    <aside id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark sm">P</div>
+        <span>Pulse</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="feed"><span class="nav-icon">◈</span><span class="nav-label">Feed</span></button>
+        <button class="nav-item" data-view="explore"><span class="nav-icon">◎</span><span class="nav-label">Explore</span></button>
+        <button class="nav-item" data-view="profile"><span class="nav-icon">◉</span><span class="nav-label">Profile</span></button>
+      </nav>
+      <div class="sidebar-user">
+        <div class="mini-avatar" id="sidebar-avatar"></div>
+        <div class="mini-info">
+          <div class="mini-name" id="sidebar-name"></div>
+          <div class="mini-handle" id="sidebar-handle"></div>
+        </div>
+        <button class="logout-btn" id="logout-btn" title="Sign Out">⏻</button>
+      </div>
+    </aside>
+
+    <main id="content">
+      <!-- Feed View -->
+      <div id="view-feed" class="view">
+        <div class="view-header"><h2>Feed</h2></div>
+        <div class="compose-card" id="compose-card">
+          <div class="compose-avatar" id="compose-avatar"></div>
+          <div class="compose-body">
+            <textarea id="compose-text" placeholder="What's on your mind?" rows="1"></textarea>
+            <div class="compose-footer">
+              <span class="char-count" id="char-count">280</span>
+              <button class="btn-primary sm" id="compose-submit">Post</button>
+            </div>
+          </div>
+        </div>
+        <div id="feed-posts" class="posts-list"></div>
+        <div class="empty-state hidden" id="feed-empty">
+          <div class="empty-icon">◎</div>
+          <h3>Your feed is quiet</h3>
+          <p>Follow some people to see their posts here.</p>
+          <button class="btn-secondary" data-view="explore">Explore people</button>
+        </div>
+      </div>
+
+      <!-- Explore View -->
+      <div id="view-explore" class="view hidden">
+        <div class="view-header">
+          <h2>Explore</h2>
+          <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search people...">
+          </div>
+        </div>
+        <div id="explore-users" class="user-grid"></div>
+        <div class="view-header" style="margin-top:2rem;"><h3>All Posts</h3></div>
+        <div id="explore-posts" class="posts-list"></div>
+      </div>
+
+      <!-- Profile View -->
+      <div id="view-profile" class="view hidden">
+        <div id="profile-content"></div>
+      </div>
+    </main>
+
+    <aside id="right-panel">
+      <div class="panel-section">
+        <h4>Who to follow</h4>
+        <div id="suggestions-list"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Post template -->
+<template id="post-tpl">
+  <article class="post-card">
+    <div class="post-header">
+      <div class="avatar post-avatar" data-username=""></div>
+      <div class="post-meta">
+        <span class="post-author" data-username=""></span>
+        <span class="post-handle" data-username=""></span>
+        <span class="post-time"></span>
+      </div>
+      <button class="post-delete hidden" title="Delete post">✕</button>
+    </div>
+    <div class="post-body"></div>
+    <div class="post-actions">
+      <button class="action-btn like-btn">
+        <span class="like-icon">♡</span>
+        <span class="like-count">0</span>
+      </button>
+      <button class="action-btn comment-toggle-btn">
+        <span>◇</span>
+        <span class="comment-count">0</span>
+      </button>
+    </div>
+    <div class="comments-section hidden">
+      <div class="comments-list"></div>
+      <div class="comment-compose">
+        <div class="mini-compose-avatar"></div>
+        <input type="text" class="comment-input" placeholder="Write a comment…">
+        <button class="comment-submit btn-primary sm">Reply</button>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
